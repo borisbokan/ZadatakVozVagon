@@ -47,7 +47,7 @@ public class VagonNit extends Thread {
 
             }while (this.vagon.getTeret() < this.vagon.getNosivost());
 
-            Poruka.naslov("....Kraj...");
+            Poruka.naslov("....Kraj utovara svih vagona ...");
         }
 
     }
@@ -70,27 +70,33 @@ public class VagonNit extends Thread {
             Dao<Vagon, Integer> DAOvagon = DaoManager.createDao(db.getKonekcija(), Vagon.class);
             Dao<Voz, Integer> DAOvoz = DaoManager.createDao(db.getKonekcija(), Voz.class);
 
-          /*  QueryBuilder<Vagon,Integer> upit=DAOvagon.queryBuilder();
-            QueryBuilder<Voz,Integer> upitVoz=DAOvoz.queryBuilder();
-            List<Vagon> vagoni=upit.leftJoin(upitVoz).where().eq(Voz.POLJE_OZNAKA,"Voz1").query();*/
-
             QueryBuilder<Vagon,Integer> upit=DAOvagon.queryBuilder();
             List<Vagon> vagoni=upit.query();
 
-            for (Vagon vagon : vagoni ) {
+            /*for (Vagon vagon : vagoni ) {
                 if(vagon.getVoz().getNaziv().contentEquals("Voz1")){
                     VagonNit vag=new VagonNit(vagon.getOznaka().toString(),vagon);
                     vag.start();
-
-                    try {
-                        vag.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                 }
+            }*/
 
+            VagonNit vag1=new VagonNit(vagoni.get(0).getOznaka(),vagoni.get(0));
+            VagonNit vag2=new VagonNit(vagoni.get(1).getOznaka(),vagoni.get(1));
+            VagonNit vag3=new VagonNit(vagoni.get(2).getOznaka(),vagoni.get(2));
+
+            vag1.start();
+            vag2.start();
+            vag3.start();
+
+            try {
+                vag1.join();
+                vag2.join();
+                vag3.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
