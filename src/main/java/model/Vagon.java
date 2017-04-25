@@ -16,7 +16,7 @@ public class Vagon {
 
         @DatabaseField(generatedId = true)
         private int id;
-        @DatabaseField(columnName = POLJE_OZNAKA,canBeNull)
+        @DatabaseField(columnName = POLJE_OZNAKA)
         private String oznaka;
         @DatabaseField(columnName = POLJE_OPIS)
         private String opis;
