@@ -73,14 +73,14 @@ public class VagonNit extends Thread {
             QueryBuilder<Vagon,Integer> upit=DAOvagon.queryBuilder();
             List<Vagon> vagoni=upit.query();
 
-            /*for (Vagon vagon : vagoni ) {
+            for (Vagon vagon : vagoni ) {
                 if(vagon.getVoz().getNaziv().contentEquals("Voz1")){
                     VagonNit vag=new VagonNit(vagon.getOznaka().toString(),vagon);
                     vag.start();
                 }
-            }*/
+            }
 
-            VagonNit vag1=new VagonNit(vagoni.get(0).getOznaka(),vagoni.get(0));
+           /* VagonNit vag1=new VagonNit(vagoni.get(0).getOznaka(),vagoni.get(0));
             VagonNit vag2=new VagonNit(vagoni.get(1).getOznaka(),vagoni.get(1));
             VagonNit vag3=new VagonNit(vagoni.get(2).getOznaka(),vagoni.get(2));
 
@@ -94,7 +94,7 @@ public class VagonNit extends Thread {
                 vag3.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
 
 
 
