@@ -18,11 +18,13 @@ public class Zadatak1KreiranjeTabela {
 
         try {
             //Brisanje tabela
+            Poruka.naslov("Brisem tabele");
             TableUtils.dropTable(db.getKonekcija(), Vagon.class,true);
             TableUtils.dropTable(db.getKonekcija(), Voz.class,true);
 
 
             //Pravim tabele
+            Poruka.naslov("Kreiram tabele");
             TableUtils.createTable(db.getKonekcija(),Voz.class);
             TableUtils.createTable(db.getKonekcija(),Vagon.class);
 
@@ -30,6 +32,10 @@ public class Zadatak1KreiranjeTabela {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            db.zatvoriKonekciju();
+        }
+
 
 
     }
