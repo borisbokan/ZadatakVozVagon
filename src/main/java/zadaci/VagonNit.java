@@ -47,7 +47,7 @@ public class VagonNit extends Thread {
 
             }while (this.vagon.getTeret() < this.vagon.getNosivost());
 
-            Poruka.naslov("....Kraj utovara svih vagona ...");
+           
         }
 
     }
@@ -77,6 +77,13 @@ public class VagonNit extends Thread {
                 if(vagon.getVoz().getNaziv().contentEquals("Voz1")){
                     VagonNit vag=new VagonNit(vagon.getOznaka().toString(),vagon);
                     vag.start();
+
+                    try {
+                        vag.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
 
