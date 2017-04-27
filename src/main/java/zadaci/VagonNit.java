@@ -8,6 +8,7 @@ import model.Voz;
 
 import javax.management.Query;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,25 +31,32 @@ public class VagonNit extends Thread {
 
     private void utovar(){
 
+        synchronized (vagon) {
 
-        synchronized (vagon){
-            Poruka.naslov("Krece utovar vagona " + this.vagon.getOznaka());
+            Poruka.naslov("Krece utovar vagona " + vagon.getOpis());
+        }
+
             do{
-                Poruka.text("tovari u vagon......>>");
+                synchronized (vagon) {
+
+                    Poruka.text("tovari u vagon......>>");
+                }
                 Random ra=new Random();
                 long period=ra.nextInt(2) * 1000;
-                this.vagon.setTeret(this.vagon.getTeret() + 1);
-                try {
-                    sleep(period);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                synchronized (vagon) {
+                    vagon.setTeret(vagon.getTeret() + 1);
                 }
-                Poruka.naslov("zavrsen utovar vagona " + this.vagon.getOznaka());
+                    try {
+                        sleep(period);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                synchronized (vagon) {
+                    Poruka.naslov("zavrsen utovar vagona " + vagon.getOznaka());
+                }
 
-            }while (this.vagon.getTeret() < this.vagon.getNosivost());
+            }while (vagon.getTeret() < vagon.getNosivost());
 
-           
-        }
 
     }
 
@@ -68,43 +76,35 @@ public class VagonNit extends Thread {
         try {
 
             Dao<Vagon, Integer> DAOvagon = DaoManager.createDao(db.getKonekcija(), Vagon.class);
-            Dao<Voz, Integer> DAOvoz = DaoManager.createDao(db.getKonekcija(), Voz.class);
+            
 
             QueryBuilder<Vagon,Integer> upit=DAOvagon.queryBuilder();
             List<Vagon> vagoni=upit.query();
 
+            ArrayList<Thread> genTre=new ArrayList<Thread>();
+
             for (Vagon vagon : vagoni ) {
                 if(vagon.getVoz().getNaziv().contentEquals("Voz1")){
-                    VagonNit vag=new VagonNit(vagon.getOznaka().toString(),vagon);
+                    VagonNit vag = new VagonNit(vagon.getOznaka(), vagon);
                     vag.start();
 
-                    try {
-                        vag.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    genTre.add(vag);
+
 
                 }
             }
 
-           /* VagonNit vag1=new VagonNit(vagoni.get(0).getOznaka(),vagoni.get(0));
-            VagonNit vag2=new VagonNit(vagoni.get(1).getOznaka(),vagoni.get(1));
-            VagonNit vag3=new VagonNit(vagoni.get(2).getOznaka(),vagoni.get(2));
+            //
+            for (Thread th : genTre) {
+                try {
+                    th.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-            vag1.start();
-            vag2.start();
-            vag3.start();
-
-            try {
-                vag1.join();
-                vag2.join();
-                vag3.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
-
-
+            Poruka.text(".......Kraj utovara....");
+                  
         } catch (SQLException e) {
             e.printStackTrace();
         }

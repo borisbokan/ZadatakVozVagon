@@ -20,8 +20,8 @@ public class Voz {
         private String oznaka;
         @DatabaseField(columnName = POLJE_NAZIV)
         private String naziv;
-        // @ForeignCollectionField(columnName = "voz")
-        //ForeignCollection<Vagon> vagoni;
+        @ForeignCollectionField(columnName = "voz")
+        ForeignCollection<Vagon> vagoni;
 
         public Voz(){
 
@@ -57,13 +57,13 @@ public class Voz {
         this.naziv = naziv;
     }
 
-    /*public ForeignCollection<Vagon> getVagoni() {
+    public ForeignCollection<Vagon> getVagoni() {
         return vagoni;
     }
 
     public void setVagoni(ForeignCollection<Vagon> vagoni) {
         this.vagoni = vagoni;
-    }*/
+    }
 
 
     public  String toString(){

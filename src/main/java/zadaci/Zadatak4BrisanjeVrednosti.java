@@ -38,7 +38,7 @@ public class Zadatak4BrisanjeVrednosti {
               Vagon vagon=upit.where().eq(Vagon.POLJE_NOSIVOST,10.00).queryForFirst();
               DAOvagon.delete(vagon);
 
-              //Prikaz svih vagona pre brisanja
+              //Prikaz svih vagona nakon brisanja
               List<Vagon> vagoninakonBrisanja=DAOvagon.queryForAll();
               Poruka.naslov("Spisak svih vagona nakon brisanja");
               for (Vagon vag : vagoninakonBrisanja) {
