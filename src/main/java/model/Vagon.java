@@ -62,19 +62,19 @@ public class Vagon {
             this.opis = opis;
         }
 
-        public Double getNosivost() {
+        public synchronized Double getNosivost() {
             return nosivost;
         }
 
-        public void setNosivost(Double nosivost) {
+        public synchronized void setNosivost(Double nosivost) {
             this.nosivost = nosivost;
         }
 
-        public Double getTeret() {
+        public synchronized Double getTeret() {
             return teret;
         }
 
-        public void setTeret(Double teret) {
+        public synchronized void setTeret(Double teret) {
             this.teret = teret;
         }
 

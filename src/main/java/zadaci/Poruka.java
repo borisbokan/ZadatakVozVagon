@@ -5,7 +5,7 @@ package zadaci;
  */
 public class Poruka {
 
-        public    static void text(String _sadrzajPoruke){
+        public   static void text(String _sadrzajPoruke){
             System.out.println(_sadrzajPoruke);
         }
 
