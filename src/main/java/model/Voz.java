@@ -20,7 +20,7 @@ public class Voz {
         private String oznaka;
         @DatabaseField(columnName = POLJE_NAZIV)
         private String naziv;
-        @ForeignCollectionField(columnName = "voz")
+        @ForeignCollectionField(columnName = "voz",eager = true)
         ForeignCollection<Vagon> vagoni;
 
         public Voz(){

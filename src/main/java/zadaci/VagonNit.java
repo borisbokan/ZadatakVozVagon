@@ -1,7 +1,9 @@
 package zadaci;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.QueryBuilder;
 import model.Vagon;
 import model.Voz;
@@ -36,7 +38,7 @@ public class VagonNit extends Thread {
             Poruka.naslov("Krece utovar vagona " + vagon.getOpis());
         }
 
-            do{
+            while (vagon.getTeret() < vagon.getNosivost()){   //Proveravam utovar tj nosivost
 
                 synchronized (vagon){
 
@@ -58,11 +60,9 @@ public class VagonNit extends Thread {
                         e.printStackTrace();
                     }
 
-                synchronized (vagon) {
-                    Poruka.naslov("zavrsen utovar vagona " + vagon.getOznaka());
-                }
+              
 
-            }while (vagon.getTeret() < vagon.getNosivost());
+            }
 
 
     }
@@ -83,11 +83,15 @@ public class VagonNit extends Thread {
         try {
 
             Dao<Vagon, Integer> DAOvagon = DaoManager.createDao(db.getKonekcija(), Vagon.class);
+            Dao<Voz, Integer> DAOVoz = DaoManager.createDao(db.getKonekcija(), Voz.class);
             
 
             QueryBuilder<Vagon,Integer> upit=DAOvagon.queryBuilder();
-            List<Vagon> vagoni=upit.query();
+            QueryBuilder<Voz,Integer> upitVoz=DAOVoz.queryBuilder();
+            upitVoz.where().eq(Voz.POLJE_NAZIV,"Voz1");
+            List<Vagon> vagoni=upit.join(upitVoz).query();
 
+            
             //Array lista generickog tipa Thread koja uzima vrednsoti napravljenih tredova
             //kako bi na njih mogli nakaciti join method.
             ArrayList<Thread> genTre=new ArrayList<Thread>();
@@ -97,6 +101,7 @@ public class VagonNit extends Thread {
                 if(vagon.getVoz().getNaziv().contentEquals("Voz1")){
                     VagonNit vag = new VagonNit(vagon.getOznaka() + " " + brojac, vagon);
                     vag.start();
+                    Poruka.text("Nit " + vag.getName() + " poceo da radi!");
 
                     genTre.add(vag);
                                   
